@@ -75,8 +75,8 @@ class Driver extends Worker {
 }
 
 const saveBtn = document.querySelector(".save");
-let className = "";
-const toDoData = JSON.parse(localStorage.getItem(className)) || [];
+const nameWorker = JSON.parse(localStorage.getItem("className")) || [];
+const dataTable = JSON.parse(localStorage.getItem('worker')) || [];
 
 const render = function () {
   const tableWorker = document.querySelector(".tableWorker");
@@ -85,25 +85,21 @@ const render = function () {
   const tableSkills = document.querySelector(".tableSkills");
   const tableMajor = document.querySelector(".tableMajor");
   const tableKids = document.querySelector(".tableKids");
-  // tableName.textContent = "";
-  // tableAge.textContent = "";
-  // tableSkills.textContent = "";
-  // tableMajor.textContent = "";
-  // tableKids.textContent = "";
-  // tableWorker.textContent = "";
-  toDoData.forEach(function (item) {
-    tableWorker.textContent = className
-    tableName.textContent = 'Name: ' + item.name
-    tableAge.textContent = 'Age: ' + item.age
-    tableSkills.textContent = 'Skills: ' + item.skills
-    tableMajor.textContent = 'Major: ' + item.major
-    tableKids.textContent = 'Kids: ' + item.kids
-    localStorage.setItem(className, JSON.stringify(toDoData));
+  nameWorker.forEach(function (item) {
+    tableWorker.textContent = item.name;
+    localStorage.setItem("className", JSON.stringify(nameWorker));
+  });
+  dataTable.forEach(function (item) {
+    tableName.textContent = "Name: " + item.name;
+    tableAge.textContent = "Age: " + item.age;
+    tableSkills.textContent = "Skills: " + item.skills;
+    tableMajor.textContent = "Major: " + item.major;
+    tableKids.textContent = "Kids: " + item.kids;
+    localStorage.setItem("worker", JSON.stringify(dataTable));
   });
 };
 
 saveBtn.addEventListener("click", function () {
-
   const inputsText = document.querySelectorAll("form input[type=text]");
   let isError = false;
 
@@ -132,14 +128,16 @@ saveBtn.addEventListener("click", function () {
         inputKids.checked,
         inputMajor.value
       );
-      className = "Mechanic";
-      toDoData.push(mechanic);
+      nameWorker.push({
+        name: 'Mechanic'
+      });
+      dataTable.push(mechanic);
       inputName.value = "";
       inputAge.value = "";
       inputSkills.value = "";
       inputKids.checked = false;
       inputMajor.value = "";
-      
+
       render();
     } else if (nameClass.value === "driver") {
       const driver = new Driver(
@@ -149,14 +147,14 @@ saveBtn.addEventListener("click", function () {
         inputKids.checked,
         inputMajor.value
       );
-      className = "Driver";
-      toDoData.push(driver);
+      nameWorker.push("Driver");
+      dataTable.push(driver);
       inputName.value = "";
       inputAge.value = "";
       inputSkills.value = "";
       inputKids.checked = false;
       inputMajor.value = "";
-      
+
       render();
     }
   }

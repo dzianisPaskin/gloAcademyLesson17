@@ -2,7 +2,8 @@ input {
   margin-bottom: 5px;
 }
 .formTable {
-  width: 500px;
+
+  width: 400px;
   margin-top: 10px;
   border: 1px solid #aaa;
   font-size: 13px;
