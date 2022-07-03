@@ -32,7 +32,7 @@ class Mechanic extends Worker {
   }
 
   set major(str) {
-    this.major = str;
+    this._major = str;
   }
 
   introduce() {
@@ -75,67 +75,91 @@ class Driver extends Worker {
 }
 
 const saveBtn = document.querySelector(".save");
-const appData = {
-  obj: [],
-  init: function () {
-    saveBtn.addEventListener("click", function () {
-      const inputsText = document.querySelectorAll("form input[type=text]");
-      this.isError = false;
+let className = "";
+const toDoData = JSON.parse(localStorage.getItem(className)) || [];
 
-      inputsText.forEach((item) => {
-        if (item.value === "") {
-          item.style.backgroundColor = "yellow";
-          this.isError = true;
-        } else {
-          item.style.backgroundColor = "white";
-        }
-      });
-
-      if (!this.isError) {
-        const tableWorker = document.querySelector(".tableWorker");
-        const tableName = document.querySelector(".tableName");
-        const tableAge = document.querySelector(".tableAge");
-        const tableSkills = document.querySelector(".tableSkills");
-        const tableMajor = document.querySelector(".tableMajor");
-        const tableKids = document.querySelector(".tableKids");
-        const inputName = document.querySelector(".name");
-        const inputAge = document.querySelector(".age");
-        const inputSkills = document.querySelector(".skills");
-        const inputMajor = document.querySelector(".major");
-        const inputKids = document.querySelector("input[type=checkbox]");
-        const nameClass = document.querySelector("select");
-
-        tableName.textContent = "Name: " + inputName.value;
-        tableAge.textContent = "Age: " + inputAge.value;
-        tableSkills.textContent = "Skills: " + inputSkills.value;
-        tableMajor.textContent = "Major: " + inputMajor.value;
-        tableKids.textContent = "Kids: " + inputKids.checked;
-        tableWorker.textContent = "Работник: " + nameClass.value;
-
-        if (nameClass.value === "mechanic") {
-          const mechanic = new Mechanic(
-            inputName.value,
-            +inputAge.value,
-            inputSkills.value,
-            inputKids.checked,
-            inputMajor.value
-          );
-          appData.obj.push(mechanic);
-          console.log(appData.obj);
-        } else if (nameClass.value === "driver") {
-          const driver = new Driver(
-            inputName.value,
-            +inputAge.value,
-            inputSkills.value,
-            inputKids.checked,
-            inputMajor.value
-          );
-          appData.obj.push(driver);
-          console.log(appData.obj);
-        }
-      }
-    });
-  },
+const render = function () {
+  const tableWorker = document.querySelector(".tableWorker");
+  const tableName = document.querySelector(".tableName");
+  const tableAge = document.querySelector(".tableAge");
+  const tableSkills = document.querySelector(".tableSkills");
+  const tableMajor = document.querySelector(".tableMajor");
+  const tableKids = document.querySelector(".tableKids");
+  // tableName.textContent = "";
+  // tableAge.textContent = "";
+  // tableSkills.textContent = "";
+  // tableMajor.textContent = "";
+  // tableKids.textContent = "";
+  // tableWorker.textContent = "";
+  toDoData.forEach(function (item) {
+    tableWorker.textContent = className
+    tableName.textContent = 'Name: ' + item.name
+    tableAge.textContent = 'Age: ' + item.age
+    tableSkills.textContent = 'Skills: ' + item.skills
+    tableMajor.textContent = 'Major: ' + item.major
+    tableKids.textContent = 'Kids: ' + item.kids
+    localStorage.setItem(className, JSON.stringify(toDoData));
+  });
 };
 
-appData.init();
+saveBtn.addEventListener("click", function () {
+
+  const inputsText = document.querySelectorAll("form input[type=text]");
+  let isError = false;
+
+  inputsText.forEach((item) => {
+    if (item.value === "") {
+      item.style.backgroundColor = "yellow";
+      isError = true;
+    } else {
+      item.style.backgroundColor = "white";
+    }
+  });
+
+  if (!isError) {
+    const inputName = document.querySelector(".name");
+    const inputAge = document.querySelector(".age");
+    const inputSkills = document.querySelector(".skills");
+    const inputMajor = document.querySelector(".major");
+    const inputKids = document.querySelector("input[type=checkbox]");
+    const nameClass = document.querySelector("select");
+
+    if (nameClass.value === "mechanic") {
+      const mechanic = new Mechanic(
+        inputName.value,
+        +inputAge.value,
+        inputSkills.value,
+        inputKids.checked,
+        inputMajor.value
+      );
+      className = "Mechanic";
+      toDoData.push(mechanic);
+      inputName.value = "";
+      inputAge.value = "";
+      inputSkills.value = "";
+      inputKids.checked = false;
+      inputMajor.value = "";
+      
+      render();
+    } else if (nameClass.value === "driver") {
+      const driver = new Driver(
+        inputName.value,
+        +inputAge.value,
+        inputSkills.value,
+        inputKids.checked,
+        inputMajor.value
+      );
+      className = "Driver";
+      toDoData.push(driver);
+      inputName.value = "";
+      inputAge.value = "";
+      inputSkills.value = "";
+      inputKids.checked = false;
+      inputMajor.value = "";
+      
+      render();
+    }
+  }
+});
+
+render();
