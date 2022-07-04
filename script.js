@@ -14,13 +14,6 @@ class Worker {
 
   set skills(str) {
     this.skills.push(str);
-    
-  }
-
-  removeObj() {
-    localStorage.clear()
-    console.log(dataTable)
-    render()
   }
 
   sayHello() {
@@ -81,9 +74,9 @@ class Driver extends Worker {
 }
 
 const saveBtn = document.querySelector(".save");
-const removeBtn = document.querySelector('#delete')
+const removeBtn = document.querySelector("#delete");
 const nameWorker = JSON.parse(localStorage.getItem("className")) || [];
-const dataTable = JSON.parse(localStorage.getItem('worker')) || [];
+const dataTable = JSON.parse(localStorage.getItem("worker")) || [];
 
 const render = function () {
   const tableWorker = document.querySelector(".tableWorker");
@@ -93,14 +86,14 @@ const render = function () {
   const tableMajor = document.querySelector(".tableMajor");
   const tableKids = document.querySelector(".tableKids");
   nameWorker.forEach(function (item) {
-    tableWorker.textContent = 'Worker: ' + item.name;
+    tableWorker.textContent = "Worker: " + item.name;
     localStorage.setItem("className", JSON.stringify(nameWorker));
   });
   dataTable.forEach(function (item) {
     tableName.textContent = "Name: " + item.name;
     tableAge.textContent = "Age: " + item.age;
-    tableSkills.textContent = "Skills: " + item._skills
-   
+    tableSkills.textContent = "Skills: " + item._skills;
+
     tableMajor.textContent = "Major: " + item._major;
     tableKids.textContent = "Kids: " + item.kids;
     localStorage.setItem("worker", JSON.stringify(dataTable));
@@ -132,13 +125,13 @@ saveBtn.addEventListener("click", function () {
       const mechanic = new Mechanic(
         inputName.value,
         +inputAge.value,
-    
+
         [inputSkills.value],
         inputKids.checked,
         inputMajor.value
       );
       nameWorker.push({
-        name: 'Mechanic'
+        name: "Mechanic",
       });
       dataTable.push(mechanic);
       inputName.value = "";
@@ -157,7 +150,7 @@ saveBtn.addEventListener("click", function () {
         inputMajor.value
       );
       nameWorker.push({
-        name: "Driver"
+        name: "Driver",
       });
       dataTable.push(driver);
       inputName.value = "";
@@ -170,10 +163,10 @@ saveBtn.addEventListener("click", function () {
     }
   }
 });
-removeBtn.addEventListener('click', function() {
-  const del = new Worker();
-  del.removeObj()
-
-})
+removeBtn.addEventListener("click", function () {
+  localStorage.clear();
+  console.log(dataTable);
+  render();
+});
 
 render();
